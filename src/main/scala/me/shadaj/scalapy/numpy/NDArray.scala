@@ -10,19 +10,19 @@ class NDArray[+T](val value: PyValue)(implicit reader: Reader[T]) extends py.Obj
 
   def unary_-(): NDArray[T] = (-origDynamic).as[NDArray[T]]
 
-  def +(o: T)(implicit writer: Writer[T]): NDArray[T] = (origDynamic + o).as[NDArray[T]]
-  def +(o: NDArray[T])(implicit writer: Writer[NDArray[T]]): NDArray[T] = (origDynamic + o).as[NDArray[T]]
+  def +[A >: T](o: A)(implicit writer: Writer[A], reader: Reader[A]): NDArray[A] = (origDynamic + o).as[NDArray[A]]
+  def +[A >: T](o: NDArray[A])(implicit writer: Writer[NDArray[A]], reader: Reader[A]): NDArray[A] = (origDynamic + o).as[NDArray[A]]
 
-  def -(o: T)(implicit writer: Writer[T]): NDArray[T] = (origDynamic - o).as[NDArray[T]]
-  def -(o: NDArray[T])(implicit writer: Writer[NDArray[T]]): NDArray[T] = (origDynamic - o).as[NDArray[T]]
+  def -[A >: T](o: A)(implicit writer: Writer[A], reader: Reader[A]): NDArray[A] = (origDynamic - o).as[NDArray[A]]
+  def -[A >: T](o: NDArray[A])(implicit writer: Writer[NDArray[A]], reader: Reader[A]): NDArray[A] = (origDynamic - o).as[NDArray[A]]
 
-  def *(o: T)(implicit writer: Writer[T]): NDArray[T] = (origDynamic * o).as[NDArray[T]]
-  def *(o: NDArray[T])(implicit writer: Writer[NDArray[T]]): NDArray[T] = (origDynamic * o).as[NDArray[T]]
+  def *[A >: T](o: A)(implicit writer: Writer[A], reader: Reader[A]): NDArray[A] = (origDynamic * o).as[NDArray[A]]
+  def *[A >: T](o: NDArray[A])(implicit writer: Writer[NDArray[A]], reader: Reader[A]): NDArray[A] = (origDynamic * o).as[NDArray[A]]
 
-  def /(o: T)(implicit writer: Writer[T]): NDArray[T] = (origDynamic / o).as[NDArray[T]]
-  def /(o: NDArray[T])(implicit writer: Writer[NDArray[T]]): NDArray[T] = (origDynamic / o).as[NDArray[T]]
+  def /[A >: T](o: A)(implicit writer: Writer[A], reader: Reader[A]): NDArray[A] = (origDynamic / o).as[NDArray[A]]
+  def /[A >: T](o: NDArray[A])(implicit writer: Writer[NDArray[A]], reader: Reader[A]): NDArray[A] = (origDynamic / o).as[NDArray[A]]
 
-  def T(implicit writer: Writer[T]): NDArray[T] = origDynamic.T.as[NDArray[T]]
+  def T[A >: T](implicit writer: Writer[A], reader: Reader[A]): NDArray[A] = origDynamic.T.as[NDArray[A]]
 
   def astype[A](
      newType: NumPyType[A]
