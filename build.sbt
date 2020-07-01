@@ -9,6 +9,8 @@ lazy val scala213Version = "2.13.2"
 lazy val supportedScalaVersions = List(scala212Version, scala213Version)
 
 scalaVersion in ThisBuild := scala213Version
+version in ThisBuild ~= (_.replaceFirst("\\+[^+]+$", ""))
+
 
 addCommandAlias(
   "publishSignedAll",
@@ -33,7 +35,7 @@ lazy val scalaPyNumpyCross = crossProject(JVMPlatform, NativePlatform)
   .in(file("."))
   .settings(
     name := "scalapy-numpy",
-    libraryDependencies += "me.shadaj" %%% "scalapy-core" % "0.3.0+31-94930a4d",
+    libraryDependencies += "me.shadaj" %%% "scalapy-core" % "0.3.0+38-2597f7b2",
   ).jvmSettings(
     crossScalaVersions := supportedScalaVersions,
     libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.0" % Test,

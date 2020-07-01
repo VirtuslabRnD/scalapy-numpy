@@ -3,7 +3,7 @@ package me.shadaj.scalapy.numpy
 import me.shadaj.scalapy.py
 import me.shadaj.scalapy.py.{PyValue, Reader, Writer}
 
-class NDArray[T](val value: PyValue)(implicit reader: Reader[T]) extends py.Object with Seq[T] {
+class NDArray[+T](val value: PyValue)(implicit reader: Reader[T]) extends py.Object with Seq[T] {
   private val origDynamic = this.as[py.Dynamic]
 
   def tolist: py.Any = origDynamic.tolist()
@@ -24,7 +24,9 @@ class NDArray[T](val value: PyValue)(implicit reader: Reader[T]) extends py.Obje
 
   def T(implicit writer: Writer[T]): NDArray[T] = origDynamic.T.as[NDArray[T]]
 
-  def astype(newType: NumPyType): NDArray[T] = origDynamic.astype(newType).as[NDArray[T]]
+  def astype[A](
+     newType: NumPyType[A]
+   )(implicit reader: Reader[A]): NDArray[A] = origDynamic.astype(newType).as[NDArray[A]]
 
   def reshape(shape: Seq[Int]): NDArray[T] = origDynamic.reshape(shape).as[NDArray[T]]
 
