@@ -30,6 +30,11 @@ class NDArray[T](val value: PyValue)(implicit reader: Reader[T]) extends py.Obje
 
   def shape: Seq[Int] = origDynamic.shape.as[Seq[Int]]
 
+  override def slice(from: Int, until: Int): NDArray[T] = {
+    val slice = py.global.slice(from, until)
+    origDynamic.__getitem__(slice).as[NDArray[T]]
+  }
+
   override def length: Int = py.global.len(this).as[Int]
 
   override def apply(idx: Int): T = origDynamic.arrayAccess(idx).as[T]
