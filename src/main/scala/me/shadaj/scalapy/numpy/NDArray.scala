@@ -8,7 +8,7 @@ import me.shadaj.scalapy.py.{PyValue, Reader, Writer}
   NDArray should check the original type on element assignment
   https://github.com/VirtuslabRnD/scalapy-numpy/issues/3
  */
-s
+
 class NDArray[+T](val value: PyValue)(implicit reader: Reader[T]) extends py.Object with Seq[T] {
   private val origDynamic = this.as[py.Dynamic]
 
