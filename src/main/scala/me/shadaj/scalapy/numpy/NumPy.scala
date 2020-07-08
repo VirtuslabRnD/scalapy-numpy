@@ -28,7 +28,7 @@ import scala.reflect.ClassTag
 
   def random: NumPyRandom = py.native
 
-  def float32: NumPyType = py.native
+  def float32: NumPyType[Float] = py.native
 
   def linalg: NumPyLinalg = py.native
 

@@ -3,28 +3,36 @@ package me.shadaj.scalapy.numpy
 import me.shadaj.scalapy.py
 import me.shadaj.scalapy.py.{PyValue, Reader, Writer}
 
-class NDArray[T](val value: PyValue)(implicit reader: Reader[T]) extends py.Object with Seq[T] {
+
+/**
+  NDArray should check the original type on element assignment
+  https://github.com/VirtuslabRnD/scalapy-numpy/issues/3
+ */
+s
+class NDArray[+T](val value: PyValue)(implicit reader: Reader[T]) extends py.Object with Seq[T] {
   private val origDynamic = this.as[py.Dynamic]
 
   def tolist: py.Any = origDynamic.tolist()
 
   def unary_-(): NDArray[T] = (-origDynamic).as[NDArray[T]]
 
-  def +(o: T)(implicit writer: Writer[T]): NDArray[T] = (origDynamic + o).as[NDArray[T]]
-  def +(o: NDArray[T])(implicit writer: Writer[NDArray[T]]): NDArray[T] = (origDynamic + o).as[NDArray[T]]
+  def +[A >: T](o: A)(implicit writer: Writer[A], reader: Reader[A]): NDArray[A] = (origDynamic + o).as[NDArray[A]]
+  def +[A >: T](o: NDArray[A])(implicit writer: Writer[NDArray[A]], reader: Reader[A]): NDArray[A] = (origDynamic + o).as[NDArray[A]]
 
-  def -(o: T)(implicit writer: Writer[T]): NDArray[T] = (origDynamic - o).as[NDArray[T]]
-  def -(o: NDArray[T])(implicit writer: Writer[NDArray[T]]): NDArray[T] = (origDynamic - o).as[NDArray[T]]
+  def -[A >: T](o: A)(implicit writer: Writer[A], reader: Reader[A]): NDArray[A] = (origDynamic - o).as[NDArray[A]]
+  def -[A >: T](o: NDArray[A])(implicit writer: Writer[NDArray[A]], reader: Reader[A]): NDArray[A] = (origDynamic - o).as[NDArray[A]]
 
-  def *(o: T)(implicit writer: Writer[T]): NDArray[T] = (origDynamic * o).as[NDArray[T]]
-  def *(o: NDArray[T])(implicit writer: Writer[NDArray[T]]): NDArray[T] = (origDynamic * o).as[NDArray[T]]
+  def *[A >: T](o: A)(implicit writer: Writer[A], reader: Reader[A]): NDArray[A] = (origDynamic * o).as[NDArray[A]]
+  def *[A >: T](o: NDArray[A])(implicit writer: Writer[NDArray[A]], reader: Reader[A]): NDArray[A] = (origDynamic * o).as[NDArray[A]]
 
-  def /(o: T)(implicit writer: Writer[T]): NDArray[T] = (origDynamic / o).as[NDArray[T]]
-  def /(o: NDArray[T])(implicit writer: Writer[NDArray[T]]): NDArray[T] = (origDynamic / o).as[NDArray[T]]
+  def /[A >: T](o: A)(implicit writer: Writer[A], reader: Reader[A]): NDArray[A] = (origDynamic / o).as[NDArray[A]]
+  def /[A >: T](o: NDArray[A])(implicit writer: Writer[NDArray[A]], reader: Reader[A]): NDArray[A] = (origDynamic / o).as[NDArray[A]]
 
-  def T(implicit writer: Writer[T]): NDArray[T] = origDynamic.T.as[NDArray[T]]
+  def T[A >: T](implicit writer: Writer[A], reader: Reader[A]): NDArray[A] = origDynamic.T.as[NDArray[A]]
 
-  def astype(newType: NumPyType): NDArray[T] = origDynamic.astype(newType).as[NDArray[T]]
+  def astype[A](
+     newType: NumPyType[A]
+   )(implicit reader: Reader[A]): NDArray[A] = origDynamic.astype(newType).as[NDArray[A]]
 
   def reshape(shape: Seq[Int]): NDArray[T] = origDynamic.reshape(shape).as[NDArray[T]]
 
